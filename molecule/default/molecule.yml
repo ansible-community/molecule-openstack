@@ -1,0 +1,7 @@
+---
+driver:
+  name: openstack
+platforms:
+  - name: instance
+provisioner:
+  name: ansible
