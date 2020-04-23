@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include molecule-openstack"
+      include_role:
+        name: "molecule-openstack"

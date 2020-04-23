@@ -1,0 +1,13 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: openstack
+platforms:
+  - name: instance
+    image: upstream-cloudinit-centos-8  # TODO: allow overrides via env
+    flavor: m1.small  # TODO: allow overrides via env
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
