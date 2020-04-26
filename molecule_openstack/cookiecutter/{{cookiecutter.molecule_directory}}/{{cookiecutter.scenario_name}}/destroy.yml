@@ -8,11 +8,11 @@
   tasks:
     - name: Destroy molecule instance(s)
       os_server:
-        name: "{{ item.name }}"
+        name: "{{ item.instance_id }}"
         state: absent
         delete_fip: true
       register: server
-      with_items: "{{ molecule_yml.platforms }}"
+      with_items: "{{ lookup('file', molecule_instance_config) | molecule_from_yaml }}"
       async: 7200
       poll: 0
 

@@ -79,7 +79,7 @@
         floating_ip_pools: "{{ item.fip_pool | default(omit) }}"
         meta:
           ssh_user: "{{ item.ssh_user | default(ssh_user) }}"
-        register: server
+      register: server
       with_items: "{{ molecule_yml.platforms }}"
       async: 7200
       poll: 0
@@ -98,6 +98,7 @@
       set_fact:
         instance_conf_dict: {
           'instance': "{{ item.openstack.name }}",
+          'instance_id': "{{ item.openstack.id }}",
           'address': "{{ item.openstack.accessIPv4 }}",
           'user': "{{ item.openstack.metadata.ssh_user }}",
           'port': "{{ ssh_port }}",
