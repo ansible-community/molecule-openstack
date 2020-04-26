@@ -77,7 +77,9 @@
         key_name: "{{ keypair_name }}"
         network: "{{ item.network | default(neutron_network_name) }}"
         floating_ip_pools: "{{ item.fip_pool | default(omit) }}"
-      register: server
+        meta:
+          ssh_user: "{{ item.ssh_user | default(ssh_user) }}"
+        register: server
       with_items: "{{ molecule_yml.platforms }}"
       async: 7200
       poll: 0
@@ -97,7 +99,7 @@
         instance_conf_dict: {
           'instance': "{{ item.openstack.name }}",
           'address': "{{ item.openstack.accessIPv4 }}",
-          'user': "{{ ssh_user }}",
+          'user': "{{ item.openstack.metadata.ssh_user }}",
           'port': "{{ ssh_port }}",
           'identity_file': "{{ keypair_path }}", }
       with_items: "{{ os_jobs.results }}"
