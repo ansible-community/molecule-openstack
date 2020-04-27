@@ -27,9 +27,6 @@
 
     keypair_name: "keypair-{{ molecule_yml['platforms'][0]['name'] }}"
     keypair_path: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/ssh_key"
-
-    nova_image: Ubuntu-16.04
-    nova_flavor: NO-Nano
   tasks:
     - name: Create security group
       os_security_group:
@@ -71,10 +68,6 @@
         mode: 0600
       when: keypair.changed
 
-    - name: Gather facts about network for use with instance creation
-      os_networks_facts:
-        name: "{{ neutron_network_name }}"
-
     - name: Create molecule instance(s)
       os_server:
         name: "{{ item.name }}"
@@ -82,8 +75,10 @@
         flavor: "{{ item.flavor }}"
         security_groups: "{{ security_group_name }}"
         key_name: "{{ keypair_name }}"
-        nics:
-          - net-id: "{{ openstack_networks[0]['id'] }}"
+        network: "{{ item.network | default(neutron_network_name) }}"
+        floating_ip_pools: "{{ item.fip_pool | default(omit) }}"
+        meta:
+          ssh_user: "{{ item.ssh_user | default(ssh_user) }}"
       register: server
       with_items: "{{ molecule_yml.platforms }}"
       async: 7200
@@ -103,8 +98,9 @@
       set_fact:
         instance_conf_dict: {
           'instance': "{{ item.openstack.name }}",
+          'instance_id': "{{ item.openstack.id }}",
           'address': "{{ item.openstack.accessIPv4 }}",
-          'user': "{{ ssh_user }}",
+          'user': "{{ item.openstack.metadata.ssh_user }}",
           'port': "{{ ssh_port }}",
           'identity_file': "{{ keypair_path }}", }
       with_items: "{{ os_jobs.results }}"
