@@ -1,0 +1,16 @@
+---
+dependency:
+  name: {{ cookiecutter.dependency_name }}
+driver:
+  name: {{ cookiecutter.driver_name }}
+platforms:
+  - name: molecule-{{ cookiecutter.role_name }}
+    image: ${MOLECULE_OPENSTACK_IMAGE}
+    flavor: ${MOLECULE_OPENSTACK_FLAVOR}
+    network: ${MOLECULE_OPENSTACK_NETWORK:-molecule}
+    fip_pool: ${MOLECULE_OPENSTACK_FIP_POOL}
+    ssh_user: ${MOLECULE_OPENSTACK_SSH_USER:-cloud-user}
+provisioner:
+  name: {{ cookiecutter.provisioner_name }}
+verifier:
+  name: {{ cookiecutter.verifier_name }}

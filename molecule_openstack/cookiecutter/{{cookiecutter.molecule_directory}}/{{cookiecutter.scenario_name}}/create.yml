@@ -6,7 +6,6 @@
   gather_facts: false
   no_log: "{{ molecule_no_log }}"
   vars:
-    ssh_user: cloud-user
     ssh_port: 22
 
     security_group_name: molecule
@@ -22,8 +21,6 @@
         group: "{{ security_group.id }}"
       - ethertype: IPv6
         group: "{{ security_group.id }}"
-
-    neutron_network_name: molecule
 
     keypair_name: "keypair-{{ molecule_yml['platforms'][0]['name'] }}"
     keypair_path: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/ssh_key"
@@ -75,10 +72,10 @@
         flavor: "{{ item.flavor }}"
         security_groups: "{{ security_group_name }}"
         key_name: "{{ keypair_name }}"
-        network: "{{ item.network | default(neutron_network_name) }}"
+        network: "{{ item.network }}"
         floating_ip_pools: "{{ item.fip_pool | default(omit) }}"
         meta:
-          ssh_user: "{{ item.ssh_user | default(ssh_user) }}"
+          ssh_user: "{{ item.ssh_user }}"
       register: server
       with_items: "{{ molecule_yml.platforms }}"
       async: 7200
