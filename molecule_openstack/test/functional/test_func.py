@@ -19,13 +19,14 @@
 #  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 #  DEALINGS IN THE SOFTWARE.
 
-import pytest
 import os
+
+import pytest
 import sh
+from molecule.test.conftest import change_dir_to, run_command
+from molecule.test.functional.conftest import metadata_lint_update
 
 from molecule import logger
-from molecule.test.conftest import run_command, change_dir_to
-from molecule.test.functional.conftest import metadata_lint_update
 
 # import change_dir_to, temp_dir
 

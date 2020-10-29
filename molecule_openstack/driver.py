@@ -18,10 +18,10 @@
 #  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 #  DEALINGS IN THE SOFTWARE.
 import os
-from molecule import logger
+
 from molecule.api import Driver
 
-from molecule import util
+from molecule import logger, util
 
 LOG = logger.get_logger(__name__)
 
@@ -142,7 +142,7 @@ class Openstack(Driver):
         pass
 
     def template_dir(self):
-        """ Return path to its own cookiecutterm templates. It is used by init
+        """Return path to its own cookiecutterm templates. It is used by init
         command in order to figure out where to load the templates from.
         """
         return os.path.join(os.path.dirname(__file__), "cookiecutter")
