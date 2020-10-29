@@ -22,8 +22,8 @@
       - ethertype: IPv6
         group: "{{ security_group.id }}"
 
-    keypair_name: "keypair-{{ molecule_yml['platforms'][0]['name'] }}"
-    keypair_path: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/ssh_key"
+    key_pair_name: "key-pair-{{ molecule_yml['platforms'][0]['name'] }}"
+    key_pair_path: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/ssh_key"
   tasks:
     - name: Create security group
       os_security_group:
@@ -42,28 +42,28 @@
         ethertype: "{{ item.ethertype | default(omit) }}"
       with_items: "{{ security_group_rules }}"
 
-    - name: Test for presence of local keypair
+    - name: Test for presence of local key pair
       stat:
-        path: "{{ keypair_path }}"
-      register: keypair_local
+        path: "{{ key_pair_path }}"
+      register: key_pair_local
 
-    - name: Delete remote keypair
+    - name: Delete remote key pair
       os_keypair:
-        name: "{{ keypair_name }}"
+        name: "{{ key_pair_name }}"
         state: absent
-      when: not keypair_local.stat.exists
+      when: not key_pair_local.stat.exists
 
-    - name: Create keypair
+    - name: Create key pair
       os_keypair:
-        name: "{{ keypair_name }}"
-      register: keypair
+        name: "{{ key_pair_name }}"
+      register: key_pair
 
-    - name: Persist the keypair
+    - name: Persist the key pair
       copy:
-        dest: "{{ keypair_path }}"
-        content: "{{ keypair.key.private_key }}"
+        dest: "{{ key_pair_path }}"
+        content: "{{ key_pair.key.private_key }}"
         mode: 0600
-      when: keypair.changed
+      when: key_pair.changed
 
     - name: Create molecule instance(s)
       os_server:
@@ -71,7 +71,7 @@
         image: "{{ item.image }}"
         flavor: "{{ item.flavor }}"
         security_groups: "{{ security_group_name }}"
-        key_name: "{{ keypair_name }}"
+        key_name: "{{ key_pair_name }}"
         network: "{{ item.network }}"
         floating_ip_pools: "{{ item.fip_pool | default(omit) }}"
         meta:
@@ -99,7 +99,7 @@
           'address': "{{ item.openstack.accessIPv4 }}",
           'user': "{{ item.openstack.metadata.ssh_user }}",
           'port': "{{ ssh_port }}",
-          'identity_file': "{{ keypair_path }}", }
+          'identity_file': "{{ key_pair_path }}", }
       with_items: "{{ os_jobs.results }}"
       register: instance_config_dict
       when: server.changed | bool
