@@ -44,7 +44,7 @@ jobs:
         run: |
           sudo apt-get update \
           && sudo apt-get install -y  ansible \
-          && ansible-doc -l | grep openstack.cloud.os_keypair
+          && ansible-doc -l | grep os_keypair
       - name: Find python version
         id: py_ver
         shell: python
