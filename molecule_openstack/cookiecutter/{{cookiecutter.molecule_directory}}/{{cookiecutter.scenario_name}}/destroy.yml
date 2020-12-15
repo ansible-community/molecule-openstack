@@ -12,7 +12,7 @@
         state: absent
         delete_fip: true
       register: server
-      with_items: "{{ lookup('file', molecule_instance_config) | molecule_from_yaml }}"
+      loop: "{{ lookup('file', molecule_instance_config) | molecule_from_yaml | flatten(levels=1) }}"
       async: 7200
       poll: 0
 
@@ -22,7 +22,7 @@
       register: os_jobs
       until: os_jobs.finished
       retries: 300
-      with_items: "{{ server.results }}"
+      loop: "{{ server.results | flatten(levels=1) }}"
 
     # Mandatory configuration for Molecule to function.
 

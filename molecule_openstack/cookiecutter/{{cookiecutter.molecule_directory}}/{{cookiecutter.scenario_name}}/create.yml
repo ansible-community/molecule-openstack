@@ -40,7 +40,7 @@
         remote_ip_prefix: "{{ item.cidr | default(omit) }}"
         remote_group: "{{ item.group | default(omit) }}"
         ethertype: "{{ item.ethertype | default(omit) }}"
-      with_items: "{{ security_group_rules }}"
+      loop: "{{ security_group_rules | flatten(levels=1) }}"
 
     - name: Test for presence of local key pair
       stat:
@@ -77,7 +77,7 @@
         meta:
           ssh_user: "{{ item.ssh_user }}"
       register: server
-      with_items: "{{ molecule_yml.platforms }}"
+      loop: "{{ molecule_yml.platforms | flatten(levels=1) }}"
       async: 7200
       poll: 0
 
@@ -87,7 +87,7 @@
       register: os_jobs
       until: os_jobs.finished
       retries: 300
-      with_items: "{{ server.results }}"
+      loop: "{{ server.results | flatten(levels=1) }}"
 
     # Mandatory configuration for Molecule to function.
 
@@ -100,7 +100,7 @@
           'user': "{{ item.openstack.metadata.ssh_user }}",
           'port': "{{ ssh_port }}",
           'identity_file': "{{ key_pair_path }}", }
-      with_items: "{{ os_jobs.results }}"
+      loop: "{{ os_jobs.results | flatten(levels=1) }}"
       register: instance_config_dict
       when: server.changed | bool
 
@@ -121,5 +121,5 @@
         host: "{{ item.address }}"
         search_regex: SSH
         delay: 10
-      with_items: "{{ lookup('file', molecule_instance_config) | molecule_from_yaml }}"
+      loop: "{{ lookup('file', molecule_instance_config) | molecule_from_yaml | flatten(levels=1) }}"
 {%- endraw %}
