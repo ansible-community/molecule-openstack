@@ -30,6 +30,66 @@ provisioning test resources.
 
 Please note that this driver is currently in its early stage of development.
 
+.. _installation-and-usage:
+
+Installation and Usage
+======================
+
+Install molecule-openstack and pre-requisites:
+
+.. code-block::
+
+   pip install molecule-openstack molecule ansible openstacksdk
+
+Create a new role with molecule using the openstack driver:
+
+.. code-block::
+
+   molecule init role <role_name> -d openstack
+
+Configure ``<role_name>/molecule/default/molecule.yaml`` with required
+parameters based on your openstack cloud. A simple config is:
+
+.. code-block:: yaml
+
+   dependency:
+      name: galaxy
+   driver:
+      name: openstack
+   platforms:
+   - name: molecule-foo
+      image: "ubuntu"
+      flavor: "m1.medium"
+      network: "private"
+      fip_pool: "public"
+      ssh_user: "ubuntu"
+   provisioner:
+      name: ansible
+   verifier:
+      name: ansible
+
+Argument ``fip_pool`` in only required when network is not an external
+network. Instead of configuring
+``<role_name>/molecule/default/molecule.yaml`` the following environment
+variables can be exported:
+
+.. code-block::
+
+   export MOLECULE_OPENSTACK_IMAGE=ubuntu
+   export MOLECULE_OPENSTACK_FLAVOR=m1.medium
+   export MOLECULE_OPENSTACK_NETWORK=private
+   export MOLECULE_OPENSTACK_FIP_POOL=public
+   export MOLECULE_OPENSTACK_SSH_USER=ubuntu
+
+After this molecule can be run from the base-dir of the role:
+
+.. code-block::
+
+   source ~/.openrc
+   molecule test
+
+
+
 .. _get-involved:
 
 Get Involved
