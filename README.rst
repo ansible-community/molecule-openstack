@@ -39,7 +39,7 @@ Install molecule-openstack and pre-requisites:
 
 .. code-block::
 
-   pip install molecule-openstack molecule ansible openstacksdk
+   pip install molecule-openstack ansible openstacksdk
 
 Create a new role with molecule using the openstack driver:
 
