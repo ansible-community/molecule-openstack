@@ -6,13 +6,14 @@
   gather_facts: false
   no_log: "{{ molecule_no_log }}"
   tasks:
+    # molecule_instance_config might not be present, therefore ignore errors and default to an empty config
     - name: Destroy molecule instance(s)
       os_server:
         name: "{{ item.instance_id }}"
         state: absent
         delete_fip: true
       register: server
-      loop: "{{ lookup('file', molecule_instance_config) | from_yaml | flatten(levels=1) }}"
+      loop: "{{ lookup('file', molecule_instance_config, errors='ignore') | default([], true) | from_yaml | flatten(levels=1) }}"
       async: 7200
       poll: 0
 
