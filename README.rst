@@ -72,11 +72,11 @@ variables can be exported:
 
 .. code-block::
 
-   export MOLECULE_OPENSTACK_IMAGE=ubuntu
-   export MOLECULE_OPENSTACK_FLAVOR=m1.medium
-   export MOLECULE_OPENSTACK_NETWORK=private
-   export MOLECULE_OPENSTACK_FIP_POOL=public
-   export MOLECULE_OPENSTACK_SSH_USER=ubuntu
+   $ export MOLECULE_OPENSTACK_IMAGE=ubuntu
+   $ export MOLECULE_OPENSTACK_FLAVOR=m1.medium
+   $ export MOLECULE_OPENSTACK_NETWORK=private
+   $ export MOLECULE_OPENSTACK_FIP_POOL=public
+   $ export MOLECULE_OPENSTACK_SSH_USER=ubuntu
 
 After this molecule can be run from the base-dir of the role:
 
@@ -85,6 +85,26 @@ After this molecule can be run from the base-dir of the role:
    source ~/.openrc
    molecule test
 
+
+.. _functional-tests:
+
+Functional Tests
+================
+
+Functional tests can be run with tox but require access to an openstack
+cluster. They are not part of `ci` yet. To run them locally:
+
+.. code-block::
+
+   $ export MOLECULE_OPENSTACK_IMAGE=<image_name>
+   $ export MOLECULE_OPENSTACK_FLAVOR=<flavor>
+   $ export MOLECULE_OPENSTACK_NETWORK=<network>
+   $ export MOLECULE_OPENSTACK_FIP_POOL=<fip_pool_if_required>
+   $ export MOLECULE_OPENSTACK_SSH_USER=<ssh_user>
+
+   $ source openstack_openrc.sh
+
+   $ tox -e py36-functional   # or 37,38,39
 
 
 .. _get-involved:
