@@ -31,7 +31,6 @@ from molecule import logger
 LOG = logger.get_logger(__name__)
 
 
-@pytest.mark.xfail(reason="need to fix template path")
 def test_command_init_scenario(temp_dir):
     role_directory = os.path.join(temp_dir.strpath, "test-init")
     cmd = ["molecule", "init", "role", "test-init"]
@@ -54,6 +53,3 @@ def test_command_init_scenario(temp_dir):
         assert run_command(cmd).returncode == 0
 
         assert os.path.isdir(scenario_directory)
-
-        cmd = ["molecule", "test", "-s", "test-scenario"]
-        assert run_command(cmd).returncode == 0
