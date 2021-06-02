@@ -114,15 +114,31 @@ class Openstack(Driver):
     def ansible_connection_options(self, instance_name):
         try:
             d = self._get_instance_config(instance_name)
-
-            return {
+            conn = {
                 "ansible_user": d["user"],
                 "ansible_host": d["address"],
                 "ansible_port": d["port"],
-                "ansible_private_key_file": d["identity_file"],
-                "connection": "ssh",
-                "ansible_ssh_common_args": " ".join(self.ssh_connection_options),
+                "connection": d.get("connection", "ssh"),
+                "ansible_connection": d.get("connection", "ssh")
             }
+
+            if conn["connection"] == "ssh":
+                if "password" in d:
+                    conn["ansible_password"] = d["password"]
+                else:
+                    conn["ansible_private_key_file"] = d["identity_file"]
+                conn["ansible_ssh_common_args"] = " ".join(self.ssh_connection_options)
+            else:
+                if "password" in d:
+                    conn["ansible_password"] = d["password"]
+
+            # Pass in extra {connection}_option keys to support other connection options
+            # for example winrm_
+            for key, val in d.items():
+                if conn['connection'] in key:
+                    conn[key] = val
+
+            return conn
         except StopIteration:
             return {}
         except IOError:
