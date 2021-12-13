@@ -119,7 +119,7 @@ class Openstack(Driver):
                 "ansible_host": d["address"],
                 "ansible_port": d["port"],
                 "connection": d.get("connection", "ssh"),
-                "ansible_connection": d.get("connection", "ssh")
+                "ansible_connection": d.get("connection", "ssh"),
             }
 
             if conn["connection"] == "ssh":
@@ -135,7 +135,7 @@ class Openstack(Driver):
             # Pass in extra {connection}_option keys to support other connection options
             # for example winrm_
             for key, val in d.items():
-                if conn['connection'] in key:
+                if conn["connection"] in key:
                     conn[key] = val
 
             return conn
