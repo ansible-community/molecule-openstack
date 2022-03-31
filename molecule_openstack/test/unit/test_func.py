@@ -11,7 +11,7 @@ LOG = logger.get_logger(__name__)
 
 def test_command_init_role(temp_dir):
     os.path.join(temp_dir.strpath, "test-init")
-    cmd = ["molecule", "init", "role", "test-init"]
+    cmd = ["molecule", "init", "role", "acme.test_init"]
     assert run_command(cmd).returncode == 0
 
 
