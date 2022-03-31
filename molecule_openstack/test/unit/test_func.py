@@ -41,7 +41,3 @@ def test_command_init_scenario(tmp_path: pathlib.Path):
 
         result = run_command(["molecule", "reset", "-s", scenario_name])
         assert result.returncode == 0
-
-        cmd = ["molecule", "--debug", "test", "-s", scenario_name]
-        result = run_command(cmd)
-        assert result.returncode == 0
