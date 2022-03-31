@@ -28,10 +28,8 @@ repos:
     hooks:
       - id: flake8
         additional_dependencies:
-          - pydocstyle>=5.1.1
           - flake8-absolute-import
           - flake8-black>=0.1.1
-          - flake8-docstrings>=1.5.0
   - repo: https://github.com/adrienverge/yamllint.git
     rev: v1.26.3
     hooks:
