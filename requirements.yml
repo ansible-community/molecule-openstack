@@ -1,0 +1,4 @@
+# helps ansible-lint install required collection when it is missing
+collections:
+  - name: openstack.cloud
+    version: ">=1.5.3"
