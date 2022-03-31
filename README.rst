@@ -104,7 +104,7 @@ cluster. They are not part of `ci` yet. To run them locally:
 
    $ source openstack_openrc.sh
 
-   $ tox -e py37-functional   # or 38,39
+   $ tox -e py38-functional   # or 39
 
 
 .. _get-involved:

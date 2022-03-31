@@ -21,9 +21,9 @@ jobs:
         include:
           - tox_env: lint
           # - tox_env: docs
-          - tox_env: py37
-            PREFIX: PYTEST_REQPASS=3
           - tox_env: py38
+            PREFIX: PYTEST_REQPASS=3
+          - tox_env: py38-devel
             PREFIX: PYTEST_REQPASS=3
           - tox_env: py39
             PREFIX: PYTEST_REQPASS=3
