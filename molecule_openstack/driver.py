@@ -18,6 +18,7 @@
 #  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 #  DEALINGS IN THE SOFTWARE.
 import os
+from typing import Dict
 
 from molecule.api import Driver
 
@@ -146,3 +147,8 @@ class Openstack(Driver):
         command in order to figure out where to load the templates from.
         """
         return os.path.join(os.path.dirname(__file__), "cookiecutter")
+
+    @property
+    def required_collections(self) -> Dict[str, str]:
+        """Return collections dict containing names and versions required."""
+        return {"openstack.cloud": "1.5.3"}
