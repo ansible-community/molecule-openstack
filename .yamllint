@@ -1,6 +1,6 @@
 extends: default
 ignore: |
-  */cookiecutter/
+  **/cookiecutter/
   .github/workflows/
   .tox
 
